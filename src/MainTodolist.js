@@ -4,6 +4,8 @@ import {
   CrossCircledIcon,
 } from "@radix-ui/react-icons";
 
+import { useEffect } from "react";
+
 const MainTodoList = ({
   todos,
   setTodos,
@@ -49,10 +51,11 @@ const MainTodoList = ({
         ...todos,
         {
           id: id,
-          name: `new todo`,
+          name: `td${id}`,
           iscompleted: false,
           ischecked: false,
           isshowed: viewmode !== "done" ? true : false,
+          todoflow: { nodes: [], edges: [] },
         },
       ]);
     }
@@ -61,6 +64,15 @@ const MainTodoList = ({
   const deleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
+
+  useEffect(() => {
+    if (viewmode === "edit") {
+      const todoToDelete = todos.find((todo) => todo.ischecked === true);
+      if (todoToDelete === null || todoToDelete === undefined) {
+        setViewmode("all");
+      }
+    }
+  }, [todos, viewmode, setViewmode]);
 
   const renameTodo = (id) => {
     const newName = prompt("새로운 이름을 입력하세요");
@@ -128,6 +140,9 @@ const MainTodoList = ({
                 onClick={() => switchCompletedValue(viewmode, todo.id)}
                 style={{
                   backgroundColor: todo.iscompleted ? "#e8fcd4" : "#f2ada5",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 {todo.iscompleted ? (

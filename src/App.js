@@ -29,7 +29,7 @@ export default function App() {
       {viewmode === "edit" ? (
         <div className={`todoEditPanel ${viewmode === "edit" ? "edit" : ""}`}>
           <TodoflowPanel {...todoprops}></TodoflowPanel>
-          <TodoMemo></TodoMemo>
+          <TodoMemo {...todoprops}></TodoMemo>
         </div>
       ) : null}
     </div>
