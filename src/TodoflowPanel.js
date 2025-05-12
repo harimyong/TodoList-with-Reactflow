@@ -21,6 +21,7 @@ const TodoflowPanel = ({ todos, setTodos, setViewmode }) => {
           <div className="todoflowToolbar">
             <div>{todo.name}</div>
             <button onClick={handleClose}>닫기</button>
+            <button>노드 추가</button>
           </div>
         ) : null
       )}

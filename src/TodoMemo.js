@@ -1,13 +1,18 @@
 const TodoMemo = ({ todos }) => {
   return (
     <div
-      className="todoMemo"
       style={{
         display: todos.every((todo) => todo.ischecked === false)
           ? "none"
-          : "flex",
+          : "block",
       }}
-    ></div>
+      className="todoMemo"
+    >
+      <div contentEditable className="todoMemoInputBox"></div>
+      <div className="todoMemoToolbar">
+        <button>저장</button>
+      </div>
+    </div>
   );
 };
 
