@@ -1,0 +1,168 @@
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  background-color: white;
+  margin: 0%;
+}
+
+div {
+  margin-left: 5px;
+  margin-right: 5px;
+  /* border: solid;
+  border-radius: 10px; */
+  clear: both;
+}
+
+.todoWrapper {
+  overflow: hidden; /* 자식 요소가 부모를 벗어나지 않게 함 */
+  box-sizing: border-box; /* 테두리 및 패딩 포함하여 크기 계산 */
+  border: solid;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 40vw; /*800px 40vw*/
+  margin: 5rem 0px;
+  transition: all 0.8s ease-in-out;
+}
+
+.todoWrapper.edit {
+  float: left;
+  width: 90vw; /*1500px 90vw*/
+  align-items: flex-start;
+  align-items: stretch;
+}
+
+.todoContent {
+  box-sizing: border-box; /* 테두리 및 패딩 포함하여 크기 계산 */
+  border: solid transparent;
+  /* border-color: red; */
+  border-radius: 10px;
+  justify-content: center;
+  width: 100%;
+  transition: all 0.7s ease-in-out;
+  overflow: hidden;
+}
+
+.todoContent.edit {
+  width: 30%;
+  margin-right: 10px;
+}
+
+.todoEditPanel {
+  display: none;
+  box-sizing: border-box; /* 테두리 및 패딩 포함하여 크기 계산 */
+  border: solid;
+  border-radius: 10px;
+  margin: 10px;
+  transition: all 0.7s ease-in-out;
+  flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.todoEditPanel.edit {
+  display: flex;
+  margin: 0;
+  width: 70%;
+}
+
+.todoMemo {
+  flex: 1;
+  min-height: 100px;
+  border: solid;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin: 5px;
+}
+
+.todoflowPanel {
+  border: solid;
+  border-radius: 10px;
+  height: 600px;
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+.todoTitle {
+  text-align: center;
+  font-size: 60px;
+  margin-top: 10px;
+  padding: 0px 15px;
+  margin-bottom: 10px;
+}
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  border: solid;
+  border-radius: 10px;
+  padding: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/*todoItem에는 이후에 추가할 버튼들이 있음.*/
+.todoItem {
+  border: solid;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  height: 3rem;
+  margin: 5px;
+  padding: 10px;
+  overflow: hidden; /* 자식 요소가 부모를 벗어나지 않게 함 */
+  box-sizing: border-box;
+}
+
+.todoItemName {
+  display: inline-block;
+  max-width: 100px;
+  margin: 0 10px;
+  word-wrap: break-word; /* 긴 단어도 잘라서 다음 줄로 넘김 */
+  overflow-wrap: break-word; /* 긴 단어도 잘라서 다음 줄로 넘김 */
+}
+
+.todoItemButtons {
+  border: 0;
+  display: flex;
+  align-items: center;
+}
+
+button {
+  border-radius: 10px;
+  margin: 3px;
+  background-color: white;
+}
+
+.todoItem.Plus {
+  border: solid;
+  border-radius: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  clear: both;
+  background-color: white;
+  line-height: 1;
+  font-size: 200%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.todoListToolbar button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
