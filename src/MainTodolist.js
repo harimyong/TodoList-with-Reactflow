@@ -56,6 +56,7 @@ const MainTodoList = ({
           ischecked: false,
           isshowed: viewmode !== "done" ? true : false,
           todoflow: { nodes: [], edges: [] },
+          memo: "",
         },
       ]);
     }
