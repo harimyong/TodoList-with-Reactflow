@@ -54,10 +54,9 @@ const TodoflowPanel = ({
             <ReactFlow
               nodes={node.nodes}
               edges={[]}
+              onNodesChange={onNodesChange}
               style={{
                 backgroundColor: "#EDD5D0",
-                boxSizing: "border-box",
-                overflow: "hidden",
               }}
             >
               <Background />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNodesState } from "@xyflow/react";
+import { useNodesState, ReactFlowProvider } from "@xyflow/react";
 
 import TodoListToolbar from "./TodolistToolbar";
 import MainTodoList from "./MainTodolist";
@@ -37,7 +37,9 @@ export default function App() {
       </div>
       {viewmode === "edit" ? (
         <div className={`todoEditPanel ${viewmode === "edit" ? "edit" : ""}`}>
-          <TodoflowPanel {...todoprops}></TodoflowPanel>
+          <ReactFlowProvider>
+            <TodoflowPanel {...todoprops}></TodoflowPanel>
+          </ReactFlowProvider>
           <TodoMemo {...todoprops}></TodoMemo>
         </div>
       ) : null}
