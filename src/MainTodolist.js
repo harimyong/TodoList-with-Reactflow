@@ -13,6 +13,9 @@ const MainTodoList = ({
   setId,
   viewmode,
   setViewmode,
+  nodes,
+  setNodes,
+  setShowedNodeid,
 }) => {
   const switchCompletedValue = (mode, id) => {
     if (mode !== "edit") {
@@ -55,15 +58,16 @@ const MainTodoList = ({
           iscompleted: false,
           ischecked: false,
           isshowed: viewmode !== "done" ? true : false,
-          todoflow: { nodes: [], edges: [] },
           memo: "",
         },
       ]);
+      setNodes([...nodes, { id: id, nodes: [] }]);
     }
   };
 
   const deleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
+    setNodes(nodes.filter((node) => node.id !== id));
   };
 
   useEffect(() => {
@@ -87,7 +91,6 @@ const MainTodoList = ({
   };
 
   const handleCheckboxChange = (id) => {
-    // 특정 체크박스의 상태만 변경
     setTodos(
       todos.map((todo) =>
         todo.id === id ? { ...todo, ischecked: !todo.ischecked } : todo
@@ -103,6 +106,9 @@ const MainTodoList = ({
           : { ...todo, isshowed: true, ischecked: false }
       )
     );
+    nodes.forEach((node) => {
+      if (node.id === id) setShowedNodeid(id);
+    });
     setViewmode("edit");
   };
 
