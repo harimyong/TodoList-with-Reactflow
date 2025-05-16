@@ -1,0 +1,15 @@
+#todoMemo {
+  margin: 5px;
+  width: 100%;
+}
+
+#todoMemoInputBox {
+  min-height: 100px;
+  margin: 5px;
+  padding: 1rem;
+  outline: none;
+  display: block;
+  white-space: pre-wrap; /* 줄바꿈 + 들여쓰기 유지 */
+  word-break: break-word; /* 긴 단어 줄바꿈 */
+  clear: none;
+}

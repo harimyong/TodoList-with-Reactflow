@@ -1,0 +1,46 @@
+#todoList {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 100%;
+}
+
+#todoItemleft {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#todoItem {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  height: 3rem;
+  margin: 5px;
+  padding: 10px;
+}
+
+#todoItemName {
+  display: inline-block;
+  max-width: 100px;
+  margin: 0 10px;
+  word-wrap: break-word; /* 긴 단어도 잘라서 다음 줄로 넘김 */
+  overflow-wrap: break-word; /* 긴 단어도 잘라서 다음 줄로 넘김 */
+}
+
+#todoItem.plus {
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

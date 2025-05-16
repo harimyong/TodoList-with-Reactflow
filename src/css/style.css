@@ -1,0 +1,98 @@
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  background-color: white;
+  margin: 0%;
+}
+
+button {
+  border-radius: 10px;
+  margin: 3px;
+  background-color: white;
+  height: 30px;
+}
+
+.divBox {
+  margin-left: 5px;
+  margin-right: 5px;
+  clear: both;
+}
+
+.bordBox {
+  border: solid;
+  border-radius: 10px;
+}
+
+.parent {
+  overflow: hidden; /* 자식 요소가 부모를 벗어나지 않게 함 */
+  box-sizing: border-box; /* 테두리 및 패딩 포함하여 크기 계산 */
+}
+
+.child {
+  box-sizing: border-box; /* 테두리 및 패딩 포함하여 크기 계산 */
+}
+
+.rowSorted {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.columnSorted {
+  display: flex;
+  align-items: center;
+}
+
+#todoWrapper {
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 40vw; /*800px 40vw*/
+  margin: 5rem 0px;
+  transition: all 0.5s ease-in-out;
+}
+
+#todoWrapper.edit {
+  float: left;
+  padding-right: 5px;
+  width: 90vw; /*1500px 90vw*/
+  align-items: flex-start;
+  align-items: stretch;
+}
+
+#todoContent {
+  border: solid transparent;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+  flex-direction: column;
+}
+
+#todoContent.edit {
+  width: 30%;
+  margin-right: 10px;
+}
+
+#todoTitle {
+  text-align: center;
+  font-size: 60px;
+  margin-top: 10px;
+  padding: 0px 15px;
+  margin-bottom: 10px;
+}
+
+#todoEditPanel {
+  display: none;
+  margin: 10px;
+  transition: all 0.5s ease-in-out;
+  flex-direction: column;
+  padding: 10px 15px;
+}
+
+#todoEditPanel.edit {
+  display: flex;
+  width: 70%;
+}

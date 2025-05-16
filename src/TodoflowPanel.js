@@ -1,32 +1,76 @@
-import "@xyflow/react/dist/style.css";
 import {
   ReactFlow,
-  Controls,
   Background,
-  ReactFlowProvider,
+  Controls,
+  useNodesState,
+  applyNodeChanges,
 } from "@xyflow/react";
-import AddNodeBtn from "./AddNodeBtn";
+import { useCallback, useState, useEffect } from "react";
+
+const AddNodeBtn = ({ todoid, todos, setTodos }) => {
+  const handleAddNode = useCallback(() => {
+    const Nodeid = crypto.randomUUID(); // 고유 ID
+    const x = Math.random() * 150;
+    const y = Math.random() * 75;
+
+    const newNode = {
+      id: Nodeid.slice(0, 4),
+      position: { x, y },
+      data: { label: "new Node" },
+      type: "default",
+    };
+
+    setTodos(
+      todos.map((todo) =>
+        todo.id === todoid
+          ? {
+              ...todo,
+              nodes: [...todo.nodes, newNode],
+            }
+          : todo
+      )
+    );
+  }, [todoid, todos, setTodos]);
+
+  return <button onClick={handleAddNode}>노드 추가</button>;
+};
 
 const TodoflowPanel = ({
   todos,
   setTodos,
-  setViewmode,
-  nodes,
-  setNodes,
-  onNodesChange,
   showedNodeid,
   setShowedNodeid,
+  setViewmode,
 }) => {
-  const todoflowBundle = {
-    todos,
-    setTodos,
-    setViewmode,
-    nodes,
-    setNodes,
-    onNodesChange,
-    showedNodeid,
-    setShowedNodeid,
-  };
+  const [selectedTodo, setSelectedTodo] = useState(
+    todos.find((todo) => todo.id === showedNodeid)
+  );
+  const [nodes, setNodes] = useNodesState(selectedTodo.nodes);
+
+  useEffect(() => {
+    setSelectedTodo(todos.find((todo) => todo.id === showedNodeid));
+  }, [showedNodeid, todos]);
+
+  useEffect(() => {
+    setNodes(selectedTodo.nodes);
+  }, [selectedTodo, setNodes]);
+
+  const handleNodesChange = useCallback(
+    (changes) => {
+      setNodes((nds) => {
+        const updated = applyNodeChanges(changes, nds);
+        setTodos(
+          todos.map((todo) =>
+            todo === selectedTodo
+              ? { ...todo, nodes: applyNodeChanges(changes, nds) }
+              : todo
+          )
+        );
+        return updated;
+      });
+    },
+    [setNodes, selectedTodo, todos, setTodos]
+  );
 
   const handleClose = () => {
     setViewmode("all");
@@ -35,36 +79,36 @@ const TodoflowPanel = ({
   };
 
   return (
-    <div className="todoflowPanel">
+    <div id="flowContainer" className="parent rowSorted divBox">
       {todos.map((todo) =>
         todo.ischecked === true ? (
-          <div className="todoflowToolbar">
-            <div>{todo.name}</div>
+          <div id="todoflowToolbar" className="divBox bordBox">
+            <div>
+              {`현재 todo :`} {todo.name}
+            </div>
             <button onClick={handleClose}>닫기</button>
-            <ReactFlowProvider>
-              <AddNodeBtn {...todoflowBundle} todoid={todo.id}></AddNodeBtn>
-            </ReactFlowProvider>
+            <AddNodeBtn
+              todos={todos}
+              setTodos={setTodos}
+              todoid={todo.id}
+            ></AddNodeBtn>
           </div>
         ) : null
       )}
-
-      {nodes.map((node) =>
-        node.id === showedNodeid ? (
-          <div className="todoflowBox">
-            <ReactFlow
-              nodes={node.nodes}
-              edges={[]}
-              onNodesChange={onNodesChange}
-              style={{
-                backgroundColor: "#EDD5D0",
-              }}
-            >
-              <Background />
-              <Controls />
-            </ReactFlow>
-          </div>
-        ) : null
-      )}
+      <div id="todoflowBox" className="bordBox">
+        <ReactFlow
+          style={{
+            backgroundColor: "#EDD5D0",
+            borderRadius: "10px",
+          }}
+          nodes={nodes}
+          onNodesChange={handleNodesChange}
+          fitView
+        >
+          <Background />
+          <Controls />
+        </ReactFlow>
+      </div>
     </div>
   );
 };

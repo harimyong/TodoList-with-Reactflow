@@ -5,19 +5,7 @@ import {
 } from "@radix-ui/react-icons";
 
 const TodoListToolbar = ({ todos, setTodos, viewmode, setViewmode }) => {
-  const selectedTodosCount = todos.filter(
-    (todo) => todo.isshowed === true && todo.ischecked === true
-  ).length;
-
-  const doneTodosCount = todos.filter(
-    (todo) => todo.iscompleted === true
-  ).length;
-
-  const inprogressTodosCount = todos.filter(
-    (todo) => todo.iscompleted === false
-  ).length;
-
-  const toggleAllCheckboxes = () => {
+  const toggleAllCheckboxes = (viewmode) => {
     if (viewmode === "all") {
       const isallChecked = todos.every((item) => item.ischecked === true);
       setTodos(todos.map((todo) => ({ ...todo, ischecked: !isallChecked })));
@@ -67,51 +55,50 @@ const TodoListToolbar = ({ todos, setTodos, viewmode, setViewmode }) => {
   };
 
   return (
-    <div id="todolistToolbar" className="divBox parent bordBox">
-      <div id="leftbar" className="parent divBox">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <button onClick={toggleAllCheckboxes} className="MainToolbarButton">
-            {todos.length === 0
-              ? "todo 없음"
-              : todos.every((todo) => todo.ischecked === true)
-              ? "전체 해제"
-              : "전체 선택"}
-          </button>
-          <button onClick={removeSelectedtodos} className="MainToolbarButton">
-            삭제
-          </button>
-          <div style={{ marginLeft: "10px" }}>
-            {selectedTodosCount + "개 선택됨"}
-          </div>
+    <div
+      style={{
+        border: "solid",
+        borderRadius: "10px",
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+      className="todoListToolbar"
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <button onClick={() => toggleAllCheckboxes(viewmode)}>
+          {todos.length === 0
+            ? "todo 없음"
+            : todos.every((todo) => todo.ischecked === true)
+            ? "전체 해제"
+            : "전체 선택"}
+        </button>
+        <button onClick={removeSelectedtodos}>삭제</button>
+        <div style={{ marginLeft: "10px" }}>
+          {todos.filter(
+            (todo) => todo.isshowed === true && todo.ischecked === true
+          ).length + "개 선택됨"}
         </div>
       </div>
-      <div id="rightbar" className="parent divBox">
-        <button
-          onClick={() => showspecificTodos("all")}
-          className="MainToolbarButton"
-        >
+      <div>
+        <button onClick={() => showspecificTodos("all")}>
           <StarFilledIcon></StarFilledIcon>&nbsp; All &nbsp;
           {'"' + todos.length + '"'}
         </button>
-        <button
-          onClick={() => showspecificTodos("done")}
-          className="MainToolbarButton"
-        >
+        <button onClick={() => showspecificTodos("done")}>
           <CheckCircledIcon></CheckCircledIcon>&nbsp; Done &nbsp;
-          {'"' + doneTodosCount + '"'}
+          {'"' + todos.filter((todo) => todo.iscompleted === true).length + '"'}
         </button>
-        <button
-          onClick={() => showspecificTodos("inprogress")}
-          className="MainToolbarButton"
-        >
+        <button onClick={() => showspecificTodos("inprogress")}>
           <CrossCircledIcon></CrossCircledIcon>&nbsp; In progress &nbsp;
-          {'"' + inprogressTodosCount + '"'}
+          {'"' +
+            todos.filter((todo) => todo.iscompleted === false).length +
+            '"'}
         </button>
       </div>
     </div>

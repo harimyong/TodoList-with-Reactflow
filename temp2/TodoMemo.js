@@ -28,20 +28,15 @@ const TodoMemo = ({ todos, setTodos }) => {
       style={{
         display: todos.every((todo) => !todo.ischecked) ? "none" : "block",
       }}
-      id="todoMemo"
-      className="divBox parent bordBox"
+      className="todoMemo"
     >
       {currentMemo && (
         <div
           contentEditable
-          id="todoMemoInputBox"
+          className="todoMemoInputBox"
           onInput={updateTodoMemo}
           suppressContentEditableWarning
           ref={memoRef}
-          className="divBox"
-          style={{
-            display: todos.every((todo) => !todo.ischecked) ? "none" : "block",
-          }}
         />
       )}
     </div>

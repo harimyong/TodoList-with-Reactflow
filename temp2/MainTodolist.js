@@ -3,19 +3,20 @@ import {
   CheckCircledIcon,
   CrossCircledIcon,
 } from "@radix-ui/react-icons";
-import { useState } from "react";
+
 import { useEffect } from "react";
+
 const MainTodoList = ({
   todos,
   setTodos,
+  id,
+  setId,
   viewmode,
   setViewmode,
   setShowedNodeid,
 }) => {
-  const [todoid, setTodoid] = useState(0);
-
-  const switchCompletedValue = (id) => {
-    if (viewmode !== "edit") {
+  const switchCompletedValue = (mode, id) => {
+    if (mode !== "edit") {
       setTodos(
         todos.map((todo) =>
           todo.id === id
@@ -44,17 +45,14 @@ const MainTodoList = ({
     }
   };
 
-  const addTodo = () => {
-    setTodoid(todoid + 1);
-  };
-
-  useEffect(() => {
-    if (todoid > 0) {
+  const addTodo = (viewmode) => {
+    setId(id + 1);
+    if (id > 0) {
       setTodos([
         ...todos,
         {
-          id: todoid,
-          name: `td${todoid}`,
+          id: id,
+          name: `td${id}`,
           iscompleted: false,
           ischecked: false,
           isshowed: viewmode !== "done" ? true : false,
@@ -64,8 +62,7 @@ const MainTodoList = ({
         },
       ]);
     }
-    // eslint-disable-next-line
-  }, [todoid]);
+  };
 
   const deleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
@@ -114,11 +111,20 @@ const MainTodoList = ({
   };
 
   return (
-    <ul id="todoList" className="divBox bordBox">
+    <ul className="todoList">
       {todos.map((todo) =>
         todo.isshowed === true ? (
-          <div key={todo.id} id="todoItem" className="parent divBox bordBox">
-            <div id="todoItemleft" className="parent">
+          <div key={todo.id} className="todoItem">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "10px" /* 자식들 사이의 간격 */,
+                overflow: "hidden",
+                boxSizing: "border-box",
+              }}
+            >
               {viewmode === "edit" ? null : (
                 <input
                   type="checkbox"
@@ -131,24 +137,26 @@ const MainTodoList = ({
                   onChange={() => handleCheckboxChange(todo.id)}
                 ></input>
               )}
-              <div id="todoItemName">{todo.name}</div>
+              <div className="todoItemName">{todo.name}</div>
             </div>
 
-            <div id="todoItemRight" className="parent rowSorted">
+            <div className="todoItemButtons">
               <button
-                className="rowSorted"
+                onClick={() => switchCompletedValue(viewmode, todo.id)}
                 style={{
                   backgroundColor: todo.iscompleted ? "#e8fcd4" : "#f2ada5",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onClick={() => switchCompletedValue(todo.id)}
               >
-                {" "}
                 {todo.iscompleted ? (
                   <CheckCircledIcon color="green" />
                 ) : (
                   <CrossCircledIcon color="red" />
                 )}
               </button>
+
               <button onClick={() => handleOpen(todo.id)}>열기</button>
               <button onClick={() => deleteTodo(todo.id)}>삭제</button>
               <button onClick={() => renameTodo(todo.id)}>이름 변경</button>
@@ -156,7 +164,7 @@ const MainTodoList = ({
           </div>
         ) : null
       )}
-      <button id="todoItem" className="plus divBox bordBox" onClick={addTodo}>
+      <button onClick={() => addTodo(viewmode)} className="todoItem Plus">
         <PlusCircledIcon />
       </button>
     </ul>
