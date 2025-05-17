@@ -128,8 +128,8 @@ const TodoflowPanel = ({
       {todos.map((todo) =>
         todo.ischecked === true ? (
           <div id="todoflowToolbar" className="divBox bordBox rowSorted">
-            <div>
-              {`현재 todo :`} {todo.name}
+            <div className="rowSorted" style={{ gap: "10px" }}>
+              {`현재 todo : "`} {todo.name + `"`}
               <button onClick={handleClose}>닫기</button>
             </div>
             <div>
