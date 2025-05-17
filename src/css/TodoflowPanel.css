@@ -2,11 +2,15 @@
   width: 100%;
   height: 500px;
   flex-direction: column;
+  margin-bottom: 5px;
 }
 #todoflowToolbar {
+  position: relative;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
   margin-bottom: 5px;
   margin-top: 5px;
   width: 100%;

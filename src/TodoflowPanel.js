@@ -84,14 +84,23 @@ const TodoflowPanel = ({
     todos.find((todo) => todo.id === showedTodoid)
   );
   const [nodes, setNodes] = useNodesState(selectedTodo.nodes);
+  const { fitView } = useReactFlow();
 
   useEffect(() => {
     setSelectedTodo(todos.find((todo) => todo.id === showedTodoid));
+    fitView();
+    // eslint-disable-next-line
   }, [showedTodoid, todos]);
 
   useEffect(() => {
-    setNodes(selectedTodo.nodes);
-  }, [selectedTodo, setNodes]);
+    setNodes(
+      selectedTodo.nodes.map((nd) => ({
+        ...nd,
+        selected: false,
+      }))
+    );
+    // eslint-disable-next-line
+  }, [selectedTodo]);
 
   const handleNodesChange = useCallback(
     (changes) => {
@@ -99,15 +108,14 @@ const TodoflowPanel = ({
         const updated = applyNodeChanges(changes, nds);
         setTodos(
           todos.map((todo) =>
-            todo === selectedTodo
-              ? { ...todo, nodes: applyNodeChanges(changes, nds) }
-              : todo
+            todo === selectedTodo ? { ...todo, nodes: updated } : todo
           )
         );
         return updated;
       });
     },
-    [setNodes, selectedTodo, todos, setTodos]
+    // eslint-disable-next-line
+    [todos]
   );
 
   const handleClose = () => {
@@ -119,16 +127,18 @@ const TodoflowPanel = ({
     <div id="flowContainer" className="parent rowSorted divBox">
       {todos.map((todo) =>
         todo.ischecked === true ? (
-          <div id="todoflowToolbar" className="divBox bordBox">
+          <div id="todoflowToolbar" className="divBox bordBox rowSorted">
             <div>
               {`현재 todo :`} {todo.name}
+              <button onClick={handleClose}>닫기</button>
             </div>
-            <button onClick={handleClose}>닫기</button>
-            <AddNodeBtn
-              todos={todos}
-              setTodos={setTodos}
-              todoid={todo.id}
-            ></AddNodeBtn>
+            <div>
+              <AddNodeBtn
+                todos={todos}
+                setTodos={setTodos}
+                todoid={todo.id}
+              ></AddNodeBtn>
+            </div>
           </div>
         ) : null
       )}
