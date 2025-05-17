@@ -7,15 +7,15 @@ import TodoMemo from "./TodoMemo";
 export default function App() {
   const [todos, setTodos] = useState([]); //many todos
   const [viewmode, setViewmode] = useState("all"); //viewmode : all, done, inprogress, edit, close
-  const [showedNodeid, setShowedNodeid] = useState(0);
+  const [showedTodoid, setShowedTodoid] = useState(0);
 
   const props = {
     todos,
     setTodos,
     viewmode,
     setViewmode,
-    showedNodeid,
-    setShowedNodeid,
+    showedTodoid,
+    setShowedTodoid,
   };
 
   return (

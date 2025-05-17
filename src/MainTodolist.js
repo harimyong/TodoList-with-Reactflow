@@ -3,14 +3,13 @@ import {
   CheckCircledIcon,
   CrossCircledIcon,
 } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 const MainTodoList = ({
   todos,
   setTodos,
   viewmode,
   setViewmode,
-  setShowedNodeid,
+  setShowedTodoid,
 }) => {
   const [todoid, setTodoid] = useState(0);
 
@@ -108,7 +107,7 @@ const MainTodoList = ({
       )
     );
     todos.forEach((todo) => {
-      if (todo.id === id) setShowedNodeid(id);
+      if (todo.id === id) setShowedTodoid(id);
     });
     setViewmode("edit");
   };

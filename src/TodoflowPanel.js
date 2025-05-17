@@ -4,6 +4,8 @@ import {
   Controls,
   useNodesState,
   applyNodeChanges,
+  NodeToolbar,
+  useReactFlow,
 } from "@xyflow/react";
 import { useCallback, useState, useEffect } from "react";
 
@@ -17,7 +19,7 @@ const AddNodeBtn = ({ todoid, todos, setTodos }) => {
       id: Nodeid.slice(0, 4),
       position: { x, y },
       data: { label: "new Node" },
-      type: "default",
+      type: "TodoflowNode",
     };
 
     setTodos(
@@ -35,21 +37,57 @@ const AddNodeBtn = ({ todoid, todos, setTodos }) => {
   return <button onClick={handleAddNode}>노드 추가</button>;
 };
 
+const nodeTypes = {
+  TodoflowNode: FlowNode,
+};
+
+function FlowNode({ data, id }) {
+  const { setNodes, deleteElements } = useReactFlow();
+
+  const rename = () => {
+    const label = prompt("새 노드의 이름을 입력해주세요.");
+    if (label) {
+      setNodes((prev) =>
+        prev.map((n) =>
+          n.id === id ? { ...n, data: { ...n.data, label } } : n
+        )
+      );
+    }
+  };
+
+  const remove = () => {
+    deleteElements({ nodes: [{ id }] });
+  };
+
+  return (
+    <>
+      <NodeToolbar
+        isVisible={data.forceToolbarVisible || undefined}
+        position={data.toolbarPosition}
+      >
+        <button onClick={rename}>rename</button>
+        <button onClick={remove}>delete</button>
+      </NodeToolbar>
+      <div>{data?.label}</div>
+    </>
+  );
+}
+
 const TodoflowPanel = ({
   todos,
   setTodos,
-  showedNodeid,
-  setShowedNodeid,
+  showedTodoid,
+  setShowedTodoid,
   setViewmode,
 }) => {
   const [selectedTodo, setSelectedTodo] = useState(
-    todos.find((todo) => todo.id === showedNodeid)
+    todos.find((todo) => todo.id === showedTodoid)
   );
   const [nodes, setNodes] = useNodesState(selectedTodo.nodes);
 
   useEffect(() => {
-    setSelectedTodo(todos.find((todo) => todo.id === showedNodeid));
-  }, [showedNodeid, todos]);
+    setSelectedTodo(todos.find((todo) => todo.id === showedTodoid));
+  }, [showedTodoid, todos]);
 
   useEffect(() => {
     setNodes(selectedTodo.nodes);
@@ -75,9 +113,8 @@ const TodoflowPanel = ({
   const handleClose = () => {
     setViewmode("all");
     setTodos(todos.map((todo) => ({ ...todo, ischecked: false })));
-    setShowedNodeid(0);
+    setShowedTodoid(0);
   };
-
   return (
     <div id="flowContainer" className="parent rowSorted divBox">
       {todos.map((todo) =>
@@ -102,6 +139,7 @@ const TodoflowPanel = ({
             borderRadius: "10px",
           }}
           nodes={nodes}
+          nodeTypes={nodeTypes}
           onNodesChange={handleNodesChange}
           fitView
         >
