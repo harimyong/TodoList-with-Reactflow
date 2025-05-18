@@ -7,7 +7,7 @@ import {
   NodeToolbar,
   useReactFlow,
 } from "@xyflow/react";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useLayoutEffect } from "react";
 
 const AddNodeBtn = ({ todoid, todos, setTodos }) => {
   const handleAddNode = useCallback(() => {
@@ -86,19 +86,17 @@ const TodoflowPanel = ({
   const [nodes, setNodes] = useNodesState(selectedTodo.nodes);
   const { fitView } = useReactFlow();
 
+  useLayoutEffect(() => {
+    fitView(); // eslint-disable-next-line
+  }, [showedTodoid, nodes.length, fitView]);
+
   useEffect(() => {
     setSelectedTodo(todos.find((todo) => todo.id === showedTodoid));
-    fitView();
     // eslint-disable-next-line
   }, [showedTodoid, todos]);
 
   useEffect(() => {
-    setNodes(
-      selectedTodo.nodes.map((nd) => ({
-        ...nd,
-        selected: false,
-      }))
-    );
+    setNodes(selectedTodo.nodes);
     // eslint-disable-next-line
   }, [selectedTodo]);
 
@@ -123,6 +121,7 @@ const TodoflowPanel = ({
     setTodos(todos.map((todo) => ({ ...todo, ischecked: false })));
     setShowedTodoid(0);
   };
+
   return (
     <div id="flowContainer" className="parent rowSorted divBox">
       {todos.map((todo) =>

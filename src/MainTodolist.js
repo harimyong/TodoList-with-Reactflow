@@ -3,12 +3,14 @@ import {
   CheckCircledIcon,
   CrossCircledIcon,
 } from "@radix-ui/react-icons";
+//import { useReactFlow } from "@xyflow/react";
 import { useState, useEffect } from "react";
 const MainTodoList = ({
   todos,
   setTodos,
   viewmode,
   setViewmode,
+  showedTodoid,
   setShowedTodoid,
 }) => {
   const [todoid, setTodoid] = useState(0);
@@ -99,15 +101,22 @@ const MainTodoList = ({
   };
 
   const handleOpen = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id
-          ? { ...todo, isshowed: true, ischecked: true }
-          : { ...todo, isshowed: true, ischecked: false }
-      )
-    );
     todos.forEach((todo) => {
-      if (todo.id === id) setShowedTodoid(id);
+      if (todo.id === id && showedTodoid !== id) {
+        setTodos(
+          todos.map((todo) =>
+            todo.id === id
+              ? {
+                  ...todo,
+                  isshowed: true,
+                  ischecked: true,
+                  nodes: todo.nodes.map((nd) => ({ ...nd, selected: false })),
+                }
+              : { ...todo, isshowed: true, ischecked: false }
+          )
+        );
+        setShowedTodoid(id);
+      }
     });
     setViewmode("edit");
   };
