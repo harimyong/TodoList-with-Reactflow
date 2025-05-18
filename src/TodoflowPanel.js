@@ -87,7 +87,7 @@ const TodoflowPanel = ({
   const { fitView } = useReactFlow();
 
   useLayoutEffect(() => {
-    fitView(); // eslint-disable-next-line
+    fitView({ padding: 0.2 }); // eslint-disable-next-line
   }, [showedTodoid, nodes.length, fitView]);
 
   useEffect(() => {
