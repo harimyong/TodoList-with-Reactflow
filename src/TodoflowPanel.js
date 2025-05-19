@@ -6,6 +6,11 @@ import {
   applyNodeChanges,
   NodeToolbar,
   useReactFlow,
+  addEdge,
+  useEdgesState,
+  applyEdgeChanges,
+  Position,
+  Handle,
 } from "@xyflow/react";
 import { useCallback, useState, useEffect, useLayoutEffect } from "react";
 
@@ -57,6 +62,7 @@ function FlowNode({ data, id }) {
 
   const remove = () => {
     deleteElements({ nodes: [{ id }] });
+    //엣지도 한번에 삭제되게 하기
   };
 
   return (
@@ -69,6 +75,63 @@ function FlowNode({ data, id }) {
         <button onClick={remove}>delete</button>
       </NodeToolbar>
       <div>{data?.label}</div>
+
+      {/* ───── 8 개의 투명 Handle ───── */}
+      {/* Top */}
+      <Handle
+        id="s-top"
+        type="source"
+        position={Position.Top}
+        className="!opacity-0"
+      />
+      <Handle
+        id="t-top"
+        type="target"
+        position={Position.Top}
+        className="!opacity-0"
+      />
+
+      {/* Right */}
+      <Handle
+        id="s-right"
+        type="source"
+        position={Position.Right}
+        className="!opacity-0"
+      />
+      <Handle
+        id="t-right"
+        type="target"
+        position={Position.Right}
+        className="!opacity-0"
+      />
+
+      {/* Bottom */}
+      <Handle
+        id="s-bottom"
+        type="source"
+        position={Position.Bottom}
+        className="!opacity-0"
+      />
+      <Handle
+        id="t-bottom"
+        type="target"
+        position={Position.Bottom}
+        className="!opacity-0"
+      />
+
+      {/* Left */}
+      <Handle
+        id="s-left"
+        type="source"
+        position={Position.Left}
+        className="!opacity-0"
+      />
+      <Handle
+        id="t-left"
+        type="target"
+        position={Position.Left}
+        className="!opacity-0"
+      />
     </>
   );
 }
@@ -84,6 +147,7 @@ const TodoflowPanel = ({
     todos.find((todo) => todo.id === showedTodoid)
   );
   const [nodes, setNodes] = useNodesState(selectedTodo.nodes);
+  const [edges, setEdges] = useEdgesState(selectedTodo.edges);
   const { fitView } = useReactFlow();
 
   useLayoutEffect(() => {
@@ -97,8 +161,17 @@ const TodoflowPanel = ({
 
   useEffect(() => {
     setNodes(selectedTodo.nodes);
+    setEdges(selectedTodo.edges);
     // eslint-disable-next-line
   }, [selectedTodo]);
+
+  /* ─── Edge 배열을 todos에 덮어쓰기 ─── */
+  const persistEdges = (updatedEdges) =>
+    setTodos(
+      todos.map((t) =>
+        t === selectedTodo ? { ...t, nodes: t.nodes, edges: updatedEdges } : t
+      )
+    );
 
   const handleNodesChange = useCallback(
     (changes) => {
@@ -106,9 +179,35 @@ const TodoflowPanel = ({
         const updated = applyNodeChanges(changes, nds);
         setTodos(
           todos.map((todo) =>
-            todo === selectedTodo ? { ...todo, nodes: updated } : todo
+            todo === selectedTodo
+              ? { ...todo, nodes: updated, edges: todo.edges }
+              : todo
           )
         );
+        return updated;
+      });
+    },
+    // eslint-disable-next-line
+    [todos]
+  );
+
+  const handleEdgesChange = useCallback(
+    (changes) => {
+      setEdges((edgs) => {
+        const updated = applyEdgeChanges(changes, edgs);
+        persistEdges(updated);
+        return updated;
+      });
+    },
+    // eslint-disable-next-line
+    [todos]
+  );
+
+  const handleConnect = useCallback(
+    (params) => {
+      setEdges((eds) => {
+        const updated = addEdge(params, eds); // ① React Flow 내부 상태
+        persistEdges(updated); // ② todos 에도 저장
         return updated;
       });
     },
@@ -148,8 +247,11 @@ const TodoflowPanel = ({
             borderRadius: "10px",
           }}
           nodes={nodes}
+          edges={edges}
           nodeTypes={nodeTypes}
           onNodesChange={handleNodesChange}
+          onEdgesChange={handleEdgesChange}
+          onConnect={handleConnect}
           fitView
         >
           <Background />
